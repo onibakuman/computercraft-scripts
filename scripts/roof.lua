@@ -2,6 +2,7 @@
 local buildingDistanceFromStart = 5
 local lavaBucketSlot = 15
 local waterBucketSlot = 16
+local buildingSeperation = 5
 
 -- set once
 local currentStatus = "..."
@@ -363,7 +364,7 @@ function buildFullStructure()
   turtle.placeDown()
   turtle.select(1)
 
-  bwd(radius + 5)
+  bwd(radius + buildingSeperation)
   dwn(numberOfLayers + 1)
 end
 
@@ -373,7 +374,7 @@ function main()
     log("starting build...")
     getUserInput()
 
-    fwd(5)
+    fwd(buildingSeperation)
     up(roofHeight + 1)
 
     buildFullStructure()
