@@ -38,12 +38,14 @@ end
 
 function getUserInput()
     log("getting user input...")
-    print("Please enter the number of layers you want for the roof: ")
+    print("please enter the number of layers you want for the roof: ")
     local userInput = read()
     numberOfLayers = userInput
     radius = numberOfLayers * 3
 
-    print("Please enter the height of the roof: ")
+    term.clear()
+
+    print("please enter the height of the roof: ")
     userInput = read()
     roofHeight = userInput
     lavaSpreadTime = (radius * 2) + (roofHeight * 2) + (4 * 2) -- last one is floor spread
@@ -53,7 +55,7 @@ end
 
 function status()
     term.clear()
-    print("Roof Builder:")
+    print("Structure Builder:")
     print("Status: " .. currentStatus)
     print("Number of Layers: " .. numberOfLayers)
     print("Radius: " .. radius)
@@ -68,7 +70,7 @@ function put()
     while not success and firstSlot == nil do
       firstFilledSlot = getFirstUsedSlot()
       if firstFilledSlot == nil then
-	      log("Inventory empty, saving coordinates and refilling...")
+	      log("inventory empty, saving coordinates and refilling...")
         saveCoordinates()
         returnToOrigin()
         refillInventory()
