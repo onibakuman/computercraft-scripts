@@ -1,5 +1,5 @@
 -- constants
-local buildingDistanceFromStart = 5
+local buildingDistanceFromStart = 20
 local lavaBucketSlot = 15
 local waterBucketSlot = 16
 local buildingSeperation = 5
@@ -63,6 +63,15 @@ function status()
     print("X: " .. x .. " Y: " .. y .. " Z: " .. z)
 end
 
+function detectCobble()
+    local success, data = turtle.inspectDown()
+    if success then
+	    return data.name == "minecraft:cobblestone"
+    else
+	    return false
+    end
+end
+
 function put()
     log("placing block...")
     local success = turtle.placeDown()
@@ -70,13 +79,16 @@ function put()
     while not success and firstSlot == nil do
       firstFilledSlot = getFirstUsedSlot()
       if firstFilledSlot == nil then
-	      log("inventory empty, saving coordinates and refilling...")
+	log("inventory empty, saving coordinates and refilling...")
         saveCoordinates()
         returnToOrigin()
         refillInventory()
         returnToSaved()
-    	else
-	      turtle.select(firstFilledSlot)
+      else
+	if detectCobble() then
+		break
+	end
+	turtle.select(firstFilledSlot)
         success = turtle.placeDown()
       end
     end
@@ -203,7 +215,10 @@ function safeBackward()
 end
 
 function safeUp()
-    while not turtle.up() do sleep(1) end
+    while not turtle.up() do 
+	sleep(1); 
+	turtle.digUp()
+    end
     z = z + 1
 end
 
