@@ -114,7 +114,7 @@ end
 function returnToOrigin()
   log("returning to disk drive...")
 
-  local returnClearanceHeight = numberOfLayers - (savedY - roofHeight) + 1
+  local returnClearanceHeight = roofHeight + numberOfLayers - savedZ + 1
   up(returnClearanceHeight)
 
   rotateToDirection(0)
