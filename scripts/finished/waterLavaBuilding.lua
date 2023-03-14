@@ -81,9 +81,9 @@ function put()
       if firstFilledSlot == nil then
 	log("inventory empty, saving coordinates and refilling...")
         saveCoordinates()
-        returnToOrigin()
+        local clearanceHeight = returnToOrigin()
         refillInventory()
-        returnToSaved()
+        returnToSaved(clearanceHeight)
       else
 	if detectCobble() then
 		break
@@ -114,33 +114,38 @@ end
 function returnToOrigin()
   log("returning to disk drive...")
 
+  local returnClearanceHeight = numberOfLayers - (savedY - roofHeight) + 1
+  up(returnClearanceHeight)
+
   rotateToDirection(0)
-  if y < 0 then
-    fwd(math.abs(y))
-  elseif y > 0 then
-    bwd(math.abs(y))
+  if savedY < 0 then
+    fwd(math.abs(savedY))
+  elseif savedY > 0 then
+    bwd(math.abs(savedY))
   end
 
-  if x < 0 then
+  if savedX < 0 then
     left()
-    bwd(math.abs(x))
+    bwd(math.abs(savedX))
     right()
-  elseif x > 0 then
+  elseif savedX > 0 then
     right()
-    bwd(math.abs(x))
+    bwd(math.abs(savedX))
     left()
   end
   
-  dwn(z)
+  dwn(savedZ + returnClearanceHeight)
+
+  return returnClearanceHeight
 end
 
 -- go back to saved coordinates 
-function returnToSaved()
+function returnToSaved(clearanceHeight)
   log("returning to saved coordinates...")
 
   rotateToDirection(0)
 
-  up(math.abs(savedZ))
+  up(math.abs(savedZ) + clearanceHeight)
 
   if savedX < 0 then
     left()
@@ -153,6 +158,7 @@ function returnToSaved()
   end
 
   fwd(math.abs(savedY))
+  dwn(clearanceHeight)
 
   rotateToDirection(savedDirection)
 end
