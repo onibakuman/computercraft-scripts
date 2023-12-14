@@ -119,7 +119,12 @@ function plantTree()
     log("planting tree...")
 	turtle.select(1)
 
-	if turtle.getItemCount(1) < 4 then
+    if not hasSaplings() then
+       emptyFirstSlot()
+    end
+
+	if turtle.getItemCount(1) < 4 and not hasSaplings() then
+		emptyFirstSlot()
 		backToDrive()
 		replenishSaplings()
 		goToTree()
@@ -176,6 +181,25 @@ function cleanPlatform()
 	left()
 	fwd(1)
 	left()
+end
+
+function hasSaplings()
+	result = turtle.getItemDetail(1) 
+ if result == nil then
+     return false
+ end
+
+	if result.name == "minecraft:jungle_sapling" then
+		return true
+	else
+		return false
+	end
+end
+
+function emptyFirstSlot()
+	log("emptying first slot")
+	turtle.select(1)
+	turtle.drop(64)
 end
 
 -- main
